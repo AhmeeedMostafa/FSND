@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -217,4 +217,13 @@ class ArtistForm(Form):
         'facebook_link', validators=[URL()]
     )
 
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+class ShowForm(Form):
+    artist_id = StringField(
+        'artist_id', validators=[DataRequired()]
+    )
+    venue_id = StringField(
+        'venue_id', validators=[DataRequired()]
+    )
+    start_time = DateTimeField(
+        'start_time', validators=[DataRequired()]
+    )
