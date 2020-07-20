@@ -66,7 +66,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 "success": false
 }
 ```
-> or if the request didn't fullfil the expectations or there are some missing params. not sent with the request.
+- or if the request didn't fullfil the expectations or there are some missing params. not sent with the request.
 ```
 {
 "code": 400,
@@ -74,7 +74,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 "success": false
 }
 ```
-> ...etc, other codes (422 => un-processable request).
+- ...etc, other codes (422 => un-processable request).
 
 ### Success request handler
 - Returns: Any successful request would have the following output with different/variable data values
@@ -118,10 +118,10 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Request Arguments: None
 - Request queries/parameters: ?page={int} - page refers to the page number of questions page (10 questions retrieved at max. in each request). 
 - Returns: An object with
-> categories: object that has all the available categories each with two key value pairs like the returned data of /categories endpoint.
-> current_category: the id of the current category.
-> questions: object that contains a list of objects of the questions.
-> total_questions: declares the number of total questions in database.
+- categories: object that has all the available categories each with two key value pairs like the returned data of /categories endpoint.
+- current_category: the id of the current category.
+- questions: object that contains a list of objects of the questions.
+- total_questions: declares the number of total questions in database.
 ```
 - Sample request: ```curl http://127.0.0.1:5000/questions```
 
@@ -166,7 +166,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 ### DELETE /questions/<int:question_id>
 - Delete a specific question from the database.
 - Request Arguments:
-  > question_id (int): the id of the target question to be deleted.
+  - question_id (int): the id of the target question to be deleted.
 - Returns: An object with the deleted question data.
 - Sample request: ```curl http://127.0.0.1:5000/questions/20 -X DELETE```
 ```
@@ -188,9 +188,9 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Request Arguments: None
 - Request Body:
   - question(string): The question text.
-    > answer(string): The answer text.
-    > category(int): The id of the category that will have that question.
-    > difficulty(int): The difficulty score of that question's answer.
+  - answer(string): The answer text.
+  - category(int): The id of the category that will have that question.
+  - difficulty(int): The difficulty score of that question's answer.
 - Returns: An object with the added question data.
 - Sample request: ```curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"who is the CEO of google?","answer":"Sundar Pichai","category":"3","difficulty":"4"}'```
 ```
@@ -211,7 +211,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Search for questions that contains the search term
 - Request Arguments: None
 - Request Body:
-  > search_term(string): the query text that the questions would contain it.
+  - search_term(string): the query text that the questions would contain it.
 - Returns: A list with the found questions objects
 - Sample request: ```curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search_term":"bo"}'```
 ```
@@ -240,11 +240,11 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 ### GET /categories/<int:category_id>/questions
 - Fetches a list of dictionaries of available questions for a specific category 
 - Request Arguments:
-  > category_id(int): the ID of the category to retrieve its questions.
+  - category_id(int): the ID of the category to retrieve its questions.
 - Returns: An object with
-  > current_category: the type of the current category
-  > questions: A list that has category's questions objects.
-  > total_questions: declares the number of total questions in database for this category.
+  - current_category: the type of the current category
+  - questions: A list that has category's questions objects.
+  - total_questions: declares the number of total questions in database for this category.
 - Sample request: ```curl http://127.0.0.1:5000/categories/2/questions```
 ```
 {
@@ -278,8 +278,8 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Fetches a non-repeated random question for being shown in the game
 - Request Arguments: None
 - Request Body:
-  > category_id(int): the ID of the category to get a question related to.
-  > previous_questions(list or array): the list of previous questions' IDs for being ignored in having new question.
+  - category_id(int): the ID of the category to get a question related to.
+  - previous_questions(list or array): the list of previous questions' IDs for being ignored in having new question.
 - Returns: An object with the question object
 - Sample request: ```curl http://127.0.0.1:5000/quiz -X POST -H "Content-Type: application/json" -d '{"category_id":3,"previous_questions":[1, 3]}'```
 ```
