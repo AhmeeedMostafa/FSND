@@ -187,7 +187,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Adds a new question to a specfic category.
 - Request Arguments: None
 - Request Body:
-    > question(string): The question text.
+    >> question(string): The question text.
     > answer(string): The answer text.
     > category(int): The id of the category that will have that question.
     > difficulty(int): The difficulty score of that question's answer.
