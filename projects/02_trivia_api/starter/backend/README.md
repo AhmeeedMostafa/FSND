@@ -90,7 +90,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Fetches a list of dictionaries of categories 
 - Request Arguments: None
 - Returns: A list of objects each with two key value pairs which are categories, (id: 'category_id', type: 'category_title').
-- Sample request: `curl http://127.0.0.1:5000/categories`
+- Sample request: ```curl http://127.0.0.1:5000/categories```
 ```
 {
   "data": [
@@ -123,7 +123,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 > questions: object that contains a list of objects of the questions.
 > total_questions: declares the number of total questions in database.
 ```
-- Sample request: `curl http://127.0.0.1:5000/questions`
+- Sample request: ```curl http://127.0.0.1:5000/questions```
 
 {
   "code": 200,
@@ -168,7 +168,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Request Arguments:
   > question_id (int): the id of the target question to be deleted.
 - Returns: An object with the deleted question data.
-- Sample request: `curl http://127.0.0.1:5000/questions/20 -X DELETE`
+- Sample request: ```curl http://127.0.0.1:5000/questions/20 -X DELETE```
 ```
 {
   "code": 200,
@@ -187,12 +187,12 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Adds a new question to a specfic category.
 - Request Arguments: None
 - Request Body:
-  > question(string): The question text.
-  > answer(string): The answer text.
-  > category(int): The id of the category that will have that question.
-  > difficulty(int): The difficulty score of that question's answer.
+    > question(string): The question text.
+    > answer(string): The answer text.
+    > category(int): The id of the category that will have that question.
+    > difficulty(int): The difficulty score of that question's answer.
 - Returns: An object with the added question data.
-- Sample request: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"who is the CEO of google?","answer":"Sundar Pichai","category":"3","difficulty":"4"}'`
+- Sample request: ```curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"who is the CEO of google?","answer":"Sundar Pichai","category":"3","difficulty":"4"}'```
 ```
 {
   "code": 200,
@@ -213,7 +213,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 - Request Body:
   > search_term(string): the query text that the questions would contain it.
 - Returns: A list with the found questions objects
-- Sample request: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search_term":"bo"}'`
+- Sample request: ```curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search_term":"bo"}'```
 ```
 {
   "code": 200,
@@ -245,7 +245,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
   > current_category: the type of the current category
   > questions: A list that has category's questions objects.
   > total_questions: declares the number of total questions in database for this category.
-- Sample request: `curl http://127.0.0.1:5000/categories/2/questions`
+- Sample request: ```curl http://127.0.0.1:5000/categories/2/questions```
 ```
 {
   "code": 200,
@@ -281,7 +281,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
   > category_id(int): the ID of the category to get a question related to.
   > previous_questions(list or array): the list of previous questions' IDs for being ignored in having new question.
 - Returns: An object with the question object
-- Sample request: `curl http://127.0.0.1:5000/quiz -X POST -H "Content-Type: application/json" -d '{"category_id":3,"previous_questions":[1, 3]}'`
+- Sample request: ```curl http://127.0.0.1:5000/quiz -X POST -H "Content-Type: application/json" -d '{"category_id":3,"previous_questions":[1, 3]}'```
 ```
 {
   "code": 200,
