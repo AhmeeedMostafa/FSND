@@ -2,7 +2,8 @@
 
 ## Getting Started
 
-### Installing Dependencies
+### Requirements & Installing Dependencies
+Developers must have Python 3.7 & pip3 installed on their device to be able to run the server.
 
 #### Python 3.7
 
@@ -31,6 +32,7 @@ This will install all of the required packages we selected within the `requireme
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
 
 ## Database Setup
+First make sure to modify the database credentials in models.py (db username & password) are added.
 With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
 ```bash
 psql trivia < trivia.psql
@@ -52,49 +54,251 @@ Setting the `FLASK_ENV` variable to `development` will detect file changes and r
 
 Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application. 
 
-## Tasks
 
-One note before you delve into your tasks: for each endpoint you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior. 
-
-1. Use Flask-CORS to enable cross-domain requests and set response headers. 
-2. Create an endpoint to handle GET requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories. 
-3. Create an endpoint to handle GET requests for all available categories. 
-4. Create an endpoint to DELETE question using a question ID. 
-5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score. 
-6. Create a POST endpoint to get questions based on category. 
-7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
-8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
-9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
-
-REVIEW_COMMENT
+## Endpoints
+### Error handler
+- Returns: a simple object as the following,
+in case of invalid endpoint, un-supported HTTP request method to some known endpoint.
 ```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+{
+"code": 404,
+"message": "Invalid endpoint or maybe HTTP request method is not support for this endpoint.",
+"success": false
+}
+```
+or if the request didn't fullfil the expectations or there are some missing params. not sent with the request.
+```
+{
+"code": 400,
+"message": "Bad request as maybe the resource requested is not found, missing fields or wrong request.",
+"success": false
+}
+```
+...etc, other codes (422 => un-processable request).
 
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
+### Success request handler
+- Returns: Any successful request would have the following output with different data values
+```
+{
+  "code": 200,
+  "data": [...] or {...} or null,
+  "success": true
+}
+```
 
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+### GET '/categories'
+- Fetches a list of dictionaries of categories 
 - Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+- Sample request: 
+- Returns: A list of objects each with two key value pairs which are categories, (id: 'category_id', type: 'category_title').
+```
+{
+  "data": [
+    {
+      "id": 1,
+      "type": "Science"
+    },
+    {
+      "id": 2,
+      "type": "Art"
+    },
+    {
+      "id": 3,
+      "type": "Geography"
+    },
+    ...
+  ],
+  "code": 200,
+  "success": true
+}
+```
 
+### GET '/questions'
+- Fetches a list of dictionaries of available questions 
+- Request Arguments: None
+- Request queries/parameters: ?page={int} - page refers to the page number of questions page (10 questions retrieved at max. in each request). 
+- Returns: An object with
+  > categories: object that has all the available categories each with two key value pairs like the returned data of /categories endpoint.
+  > current_category: the id of the current category.
+  > questions: object that contains a list of objects of the questions.
+  > total_questions: declares the number of total questions in database.
+```
+{
+  "code": 200,
+  "data": {
+    "categories": [
+        {
+          "id": 1,
+          "type": "Science"
+        },
+        {
+          "id": 2,
+          "type": "Art"
+        },
+        ...
+      ],
+      "current_category": 4,
+      "questions": [
+        {
+          "answer": "Maya Angelou",
+          "category": 4,
+          "difficulty": 2,
+          "id": 5,
+          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+          "answer": "Muhammad Ali",
+          "category": 4,
+          "difficulty": 1,
+          "id": 9,
+          "question": "What boxer's original name is Cassius Clay?"
+        },
+        ...
+      ],
+    "total_questions": 18
+  },
+  "success": true
+}
+```
+
+### DELETE '/questions/<int:question_id>'
+- Delete a specific question from the database.
+- Request Arguments:
+  > question_id (int): the id of the target question to be deleted.
+- Returns: An object with the deleted question data.
+```
+{
+  "code": 200,
+  "data": {
+    "answer": "Maya Angelou",
+    "category": 4,
+    "difficulty": 2,
+    "id": 5,
+    "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+  },
+  "success": true
+}
+```
+
+### POST '/questions'
+- Adds a new question to a specfic category.
+- Request Arguments: None
+- Request Body:
+  > question(string): The question text.
+  > answer(string): The answer text.
+  > category(int): The id of the category that will have that question.
+  > difficulty(int): The difficulty score of that question's answer.
+- Returns: An object with the added question data.
+```
+{
+  "code": 200,
+  "data": {
+    "answer": "Test name",
+    "category": 5,
+    "difficulty": 3,
+    "id": 7,
+    "question": "Who made the test question?"
+  },
+  "success": true
+}
+```
+
+### POST '/questions/search'
+- Search for questions that contains the search term
+- Request Arguments: None
+- Request Body:
+  > search_term(string): the query text that the questions would contain it.
+- Returns: A list with the found questions objects
+```
+{
+  "code": 200,
+  "data": [
+    {
+      "answer": "Test answer",
+      "category": 5,
+      "difficulty": 3,
+      "id": 7,
+      "question": "Who (made) the test question?"
+    },
+    {
+      "answer": "Your name",
+      "category": 7,
+      "difficulty": 2,
+      "id": 10,
+      "question": "Who (made) the API?"
+    },
+  ]
+  "success": true
+}
+```
+
+### GET '/categories/<int:category_id>/questions'
+- Fetches a list of dictionaries of available questions for a specific category 
+- Request Arguments:
+  > category_id(int): the ID of the category to retrieve its questions.
+- Returns: An object with
+  > current_category: the type of the current category
+  > questions: A list that has category's questions objects.
+  > total_questions: declares the number of total questions in database for this category.
+```
+{
+  "code": 200,
+  "data": {
+      "current_category": "History",
+      "questions": [
+        {
+          "answer": "Maya Angelou",
+          "category": 4,
+          "difficulty": 2,
+          "id": 5,
+          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+          "answer": "Muhammad Ali",
+          "category": 4,
+          "difficulty": 1,
+          "id": 9,
+          "question": "What boxer's original name is Cassius Clay?"
+        },
+        ...
+      ],
+    "total_questions": 18
+  },
+  "success": true
+}
+```
+
+### POST '/quiz'
+- Fetches a non-repeated random question for being shown in the game
+- Request Arguments: None
+- Request Body:
+  > category_id(int): the ID of the category to get a question related to.
+  > previous_questions(list or array): the list of previous questions for being ignored in having new question.
+- Returns: An object with the question object
+```
+{
+  "code": 200,
+  "data": {
+    "answer": "Maya Angelou",
+    "category": 4,
+    "difficulty": 2,
+    "id": 5,
+    "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+  },
+  "success": true
+}
 ```
 
 
 ## Testing
 To run the tests, run
 ```
-dropdb trivia_test
+dropdb trivia_test (if it exists)
 createdb trivia_test
 psql trivia_test < trivia.psql
+-- make sure that you modified your database credentials of (test_falskr.py) as added db username & password --
 python test_flaskr.py
 ```
+
+## Authors
+Team of Udacity, Ahmed M.
