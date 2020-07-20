@@ -66,7 +66,7 @@ in case of invalid endpoint, un-supported HTTP request method to some known endp
 "success": false
 }
 ```
-or if the request didn't fullfil the expectations or there are some missing params. not sent with the request.
+> or if the request didn't fullfil the expectations or there are some missing params. not sent with the request.
 ```
 {
 "code": 400,
@@ -74,10 +74,10 @@ or if the request didn't fullfil the expectations or there are some missing para
 "success": false
 }
 ```
-...etc, other codes (422 => un-processable request).
+> ...etc, other codes (422 => un-processable request).
 
 ### Success request handler
-- Returns: Any successful request would have the following output with different data values
+- Returns: Any successful request would have the following output with different/variable data values
 ```
 {
   "code": 200,
@@ -86,11 +86,11 @@ or if the request didn't fullfil the expectations or there are some missing para
 }
 ```
 
-### GET '/categories'
+### GET /categories
 - Fetches a list of dictionaries of categories 
 - Request Arguments: None
-- Sample request: 
 - Returns: A list of objects each with two key value pairs which are categories, (id: 'category_id', type: 'category_title').
+- Sample request: `curl http://127.0.0.1:5000/categories`
 ```
 {
   "data": [
@@ -113,16 +113,18 @@ or if the request didn't fullfil the expectations or there are some missing para
 }
 ```
 
-### GET '/questions'
+### GET /questions
 - Fetches a list of dictionaries of available questions 
 - Request Arguments: None
 - Request queries/parameters: ?page={int} - page refers to the page number of questions page (10 questions retrieved at max. in each request). 
 - Returns: An object with
-  > categories: object that has all the available categories each with two key value pairs like the returned data of /categories endpoint.
-  > current_category: the id of the current category.
-  > questions: object that contains a list of objects of the questions.
-  > total_questions: declares the number of total questions in database.
+> categories: object that has all the available categories each with two key value pairs like the returned data of /categories endpoint.
+> current_category: the id of the current category.
+> questions: object that contains a list of objects of the questions.
+> total_questions: declares the number of total questions in database.
 ```
+- Sample request: `curl http://127.0.0.1:5000/questions`
+
 {
   "code": 200,
   "data": {
@@ -161,26 +163,27 @@ or if the request didn't fullfil the expectations or there are some missing para
 }
 ```
 
-### DELETE '/questions/<int:question_id>'
+### DELETE /questions/<int:question_id>
 - Delete a specific question from the database.
 - Request Arguments:
   > question_id (int): the id of the target question to be deleted.
 - Returns: An object with the deleted question data.
+- Sample request: `curl http://127.0.0.1:5000/questions/20 -X DELETE`
 ```
 {
   "code": 200,
   "data": {
-    "answer": "Maya Angelou",
+    "answer": "Hello, World!",
     "category": 4,
-    "difficulty": 2,
-    "id": 5,
-    "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    "difficulty": 1,
+    "id": 20,
+    "question": "First sentence most beginner programmers write?"
   },
   "success": true
 }
 ```
 
-### POST '/questions'
+### POST /questions
 - Adds a new question to a specfic category.
 - Request Arguments: None
 - Request Body:
@@ -189,50 +192,52 @@ or if the request didn't fullfil the expectations or there are some missing para
   > category(int): The id of the category that will have that question.
   > difficulty(int): The difficulty score of that question's answer.
 - Returns: An object with the added question data.
+- Sample request: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"who is the CEO of google?","answer":"Sundar Pichai","category":"3","difficulty":"4"}'`
 ```
 {
   "code": 200,
   "data": {
-    "answer": "Test name",
-    "category": 5,
-    "difficulty": 3,
+    "answer": "Sundar Pichai",
+    "category": 3,
+    "difficulty": 4,
     "id": 7,
-    "question": "Who made the test question?"
+    "question": "who is the CEO of google?"
   },
   "success": true
 }
 ```
 
-### POST '/questions/search'
+### POST /questions/search
 - Search for questions that contains the search term
 - Request Arguments: None
 - Request Body:
   > search_term(string): the query text that the questions would contain it.
 - Returns: A list with the found questions objects
+- Sample request: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"search_term":"bo"}'`
 ```
 {
   "code": 200,
   "data": [
     {
-      "answer": "Test answer",
-      "category": 5,
-      "difficulty": 3,
-      "id": 7,
-      "question": "Who (made) the test question?"
+      "answer": "Muhammad Ali",
+      "category": 4,
+      "difficulty": 1,
+      "id": 9,
+      "question": "What boxer's original name is Cassius Clay?"
     },
     {
-      "answer": "Your name",
-      "category": 7,
-      "difficulty": 2,
-      "id": 10,
-      "question": "Who (made) the API?"
-    },
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    }
   ]
   "success": true
 }
 ```
 
-### GET '/categories/<int:category_id>/questions'
+### GET /categories/<int:category_id>/questions
 - Fetches a list of dictionaries of available questions for a specific category 
 - Request Arguments:
   > category_id(int): the ID of the category to retrieve its questions.
@@ -240,6 +245,7 @@ or if the request didn't fullfil the expectations or there are some missing para
   > current_category: the type of the current category
   > questions: A list that has category's questions objects.
   > total_questions: declares the number of total questions in database for this category.
+- Sample request: `curl http://127.0.0.1:5000/categories/2/questions`
 ```
 {
   "code": 200,
@@ -247,18 +253,18 @@ or if the request didn't fullfil the expectations or there are some missing para
       "current_category": "History",
       "questions": [
         {
-          "answer": "Maya Angelou",
-          "category": 4,
-          "difficulty": 2,
-          "id": 5,
-          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+          "answer": "Escher",
+          "category": 2,
+          "difficulty": 1,
+          "id": 16,
+          "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
         },
         {
-          "answer": "Muhammad Ali",
-          "category": 4,
-          "difficulty": 1,
-          "id": 9,
-          "question": "What boxer's original name is Cassius Clay?"
+          "answer": "Mona Lisa",
+          "category": 2,
+          "difficulty": 3,
+          "id": 17,
+          "question": "La Giaconda is better known as what?"
         },
         ...
       ],
@@ -268,22 +274,23 @@ or if the request didn't fullfil the expectations or there are some missing para
 }
 ```
 
-### POST '/quiz'
+### POST /quiz
 - Fetches a non-repeated random question for being shown in the game
 - Request Arguments: None
 - Request Body:
   > category_id(int): the ID of the category to get a question related to.
-  > previous_questions(list or array): the list of previous questions for being ignored in having new question.
+  > previous_questions(list or array): the list of previous questions' IDs for being ignored in having new question.
 - Returns: An object with the question object
+- Sample request: `curl http://127.0.0.1:5000/quiz -X POST -H "Content-Type: application/json" -d '{"category_id":3,"previous_questions":[1, 3]}'`
 ```
 {
   "code": 200,
   "data": {
-    "answer": "Maya Angelou",
-    "category": 4,
+    "answer": "Lake Victoria", 
+    "category": 3,
     "difficulty": 2,
-    "id": 5,
-    "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    "id": 13,
+    "question": "What is the largest lake in Africa?"
   },
   "success": true
 }
